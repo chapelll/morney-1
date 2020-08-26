@@ -1,0 +1,3 @@
+style里面使用 @ 需要加上 ~
+范例:   @import "~@/assets/styles/test.scss";
+@的含义就是 src 文件夹 (js或者ts使用时直接用 @ )
