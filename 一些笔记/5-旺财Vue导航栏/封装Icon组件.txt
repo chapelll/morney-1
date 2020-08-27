@@ -1,0 +1,11 @@
+使用icon组件时写法过于复杂: 
+	<svg>
+        	        <use :xlink:href="#money"/>
+    	</svg>
+为了写法简便，将icon的使用封装成一个组件
+具体的做法就是使用Icon组件时只需要传递一个值，这个值就会变成 "#money" 中的 money 的值
+Icon组件:
+	<svg class="icon">
+        	         <use :xlink:href=" '#' + name"/>
+    	</svg>
+name 是其他组件使用Icon时向其传递的值
