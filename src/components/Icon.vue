@@ -6,7 +6,7 @@
 
 <script lang="ts">
 // 将一个目录里面的后缀为.svg的文件进行批量引入
-let importALL = (requireContext: __WebpackModuleApi.RequireContext) => requireContext.keys().forEach(requireContext);
+const importALL = (requireContext: __WebpackModuleApi.RequireContext) => requireContext.keys().forEach(requireContext);
 try {
     importALL(require.context('../assets/icons', true, /\.svg$/));
 } catch (error) {
