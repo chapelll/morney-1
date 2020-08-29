@@ -1,6 +1,6 @@
 <template>
     <div class="nav-wrapper">
-        <div class="content">
+        <div class="content" :class="classPrefix && `${classPrefix}-content`">
             <slot/>
         </div>
         <Nav></Nav>
@@ -10,7 +10,8 @@
 <script lang="ts">
     // 插槽 Layout 
     export default {
-        name: 'Layout'
+        name: 'Layout',
+        props: ['classPrefix']
     }
 </script>
 
@@ -18,12 +19,10 @@
     .nav-wrapper {
         display: flex;
         flex-direction: column;
-        border: 1px solid green;
         height: 100vh;
     }
     .content {
         overflow: auto;
         flex-grow: 1;
-        border: 1px solid blue;
     }
 </style>

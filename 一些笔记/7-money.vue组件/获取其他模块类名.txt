@@ -1,0 +1,10 @@
+针对父子组件来说，当子组件想要修改父组件的style时，可以向父组件传递一个前缀 : class-prefix="Layout"
+父组件收到这个值，将它绑定到自己的标签上 :class=" `${classPrefix}-content` " 
+这样父组件中的这个标签的类名就变成了: Layout-content
+子组件可以新建一个style标签(不要加 scoped)，来修改父组件的CSS
+
+	<style lang="scss">
+    	       .Layout-content {
+        	       border: 1px solid red;
+    	}
+	</style>

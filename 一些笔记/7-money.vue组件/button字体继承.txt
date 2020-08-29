@@ -1,0 +1,4 @@
+默认的button和input是不会继承父亲的字体设置的，所以需要在全局CSS上加上:
+	button, input {
+	       font: inherit;
+	}
