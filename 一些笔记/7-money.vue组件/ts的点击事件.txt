@@ -1,0 +1,7 @@
+注意，在ts中使用event事件的target时，需要为它强制指定类型，如:
+inputContent(event: MouseEvent) {
+        let button = event.target as HTMLButtonElement
+        // 指定event.target为按钮类型(按钮是一定有内容的，所以输出按钮.textContent不会再报错)
+        console.log(button.textContent);
+        this.output += button.textContent
+    }
