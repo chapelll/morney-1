@@ -1,0 +1,18 @@
+.sync是一个语法糖，它的作用是: 当一个子组件改变了一个 prop 的值时，父组件也会收到这个变化从而进行同步改变 sync的意思是同步
+
+简述: 父组件向子组件传递一个值，子组件通过prop声明拿到这个值并进行使用。当子组件想要修改这个值时，它不能直接修改，因为
+这个值是外部传入进来的。所以它要通知外部: 我要修改这个值了，修改后的值为 xxx 。当父组件接受到这个通知之后，直接把传递给子组
+件的值变成 xxx ， 这样就实现了值的改变。
+
+代码:
+父组件
+<Child :money="total" v-on:update:money="total = $event"/>
+子组件
+<button @click="$emit('update:money', money-100)">
+
+父组件向子组件传递一个名为 "money"，值为 "total" 的值，子组件接受到后又写了一个点击事件，当点击按钮的时候money的值
+就减少100(利用了$emit，'update:money'为事件名，money-100为传递给eventBus的参数.) 父组件监听 update:money 事件，
+事件发生时就直接把传递给子组件的 total 修改为 $event ，$event 就是传递给eventBus的参数 也就是 money-100.
+
+利用.sync修饰符简化:
+ <Child :money.sync="total"/>
