@@ -1,0 +1,5 @@
+@Prop (Number) xxx: number | undefined; 
+
+  // @Prop告诉Vue, xxx 是一个prop属性，
+  // (Number)告诉Vue, xxx 是一个number数据类型(运行时)
+  // : number | undefined 是ts的数据类型检查(编译时)

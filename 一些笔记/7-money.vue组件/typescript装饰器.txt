@@ -1,0 +1,17 @@
+在Vue中使用typescript时，固定写法:
+
+import Vue from 'vue';
+import { Component } from 'vue-property-decorator';
+
+@Component
+export default class Types extends Vue {
+  // 属性
+  type = '-';
+  // 方法
+  selectType(type: string) {
+    this.type = type;
+  }
+}
+
+vue-property-decorator 提供了一个装饰器，它的作用是将下列代码转换为Vue的js格式代码
+注意: ts组件必须使用继承Vue的格式
