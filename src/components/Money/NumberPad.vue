@@ -49,7 +49,7 @@ export default class NumberPad extends Vue {
     }
 
     if (this.output.indexOf(".") >= 0) {
-      // 字符串. 在output中存在
+      // 字符串 "." 在output中存在
       if (input === ".") {
         return;
       }
@@ -71,7 +71,7 @@ export default class NumberPad extends Vue {
   }
 
   ok() {
-    console.log("OK");
+    this.$emit('update:value', this.output)
   }
 }
 </script>

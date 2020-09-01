@@ -33,6 +33,9 @@ export default class Tags extends Vue {
     } else {
       this.selectedTags.push(tag);
     }
+
+    this.$emit('update:value', this.selectedTags)
+    // 当选择标签时触发xxx事件，参数为当前的selectedTags数组
   }
 
   create() {

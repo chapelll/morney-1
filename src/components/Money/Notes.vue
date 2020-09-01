@@ -9,12 +9,18 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { Component, Prop } from 'vue-property-decorator';
+import { Component, Prop, Watch } from 'vue-property-decorator';
 
 @Component
 export default class Notes extends Vue {
   //属性
   value = ''
+  // watch 
+  // 当 value 的值发生改变时就触发onValueChanged函数，第一个参数是value改变后的值，第二个参数是value改变前的值
+  @Watch('value') 
+  onValueChanged(value: string, oldValue: string) {
+    this.$emit('update:value', value)
+  }
   //方法
 }
 </script>
