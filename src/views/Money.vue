@@ -1,6 +1,6 @@
 <template>
   <Layout class-prefix="layout">
-    {{record}}
+    {{recordList}}
     <number-pad @update:value="onUpdateAmount" @submit="saveRecord"></number-pad>
 
     <types :value.sync="record.type"></types>
@@ -18,14 +18,7 @@ import Types from "@/components/Money/Types.vue";
 import Notes from "@/components/Money/Notes.vue";
 import Tags from "@/components/Money/Tags.vue";
 import { Component, Watch } from "vue-property-decorator";
-
-// 定义一个接口,名称为Record,它规定了有哪些属性及属性的类型
-type Record = {
-  tags: string[];
-  notes: string;
-  type: string;
-  amount: number;
-};
+import model from '@/model.ts'
 
 @Component({
   components: { NumberPad, Types, Notes, Tags },
@@ -33,7 +26,7 @@ type Record = {
 export default class Money extends Vue {
   // 属性
   tags = ["衣", "食", "住", "行", "玩"];
-  record: Record = {
+  record: RecordItem = {
     tags: [],
     notes: "",
     type: "-",
@@ -41,8 +34,8 @@ export default class Money extends Vue {
   }; 
   // 定义了一个对象record，它的接口是Reord，因此它必须要有Record的属性且属性数据类型要一致
 
-  recordList: Record[] = [];
-  // 定义一个recordList数组用来存放 record
+  recordList: RecordItem[] = model.fetch();
+  // 定义一个recordList数组用来存放record (它的值要从localStorage取,默认值为空)
 
   // 方法
   onUpdateTags(value: string[]) {
@@ -59,15 +52,15 @@ export default class Money extends Vue {
 
   saveRecord() {
     // 每次调用saveRecord函数时都创建一个新的对象record2，record2的属性与record相同，将它存放进recordList
-    const record2 = JSON.parse(JSON.stringify(this.record))
+    const record2: RecordItem = model.clone(this.record)
+    record2.createdAt = new Date()  
     this.recordList.push(record2)
     // push的是record这个对象的地址，所以recordList存放的都是一样的数据
-    console.log(this.recordList);
   }
   // Watch  
   @Watch('recordList')
   OnRecordListChange() {
-    window.localStorage.setItem('recordList',JSON.stringify(this.recordList))
+    model.save(this.recordList)
   }
 }
 </script>
