@@ -1,0 +1,8 @@
+我声明了一个对象record用来保存数据，它里面有四个属性(tags: 标签名, notes: 备注, type: 收入还是支出， amount: 金额)
+又声明了一个数组recordList用来保存 各个record.但是在测试时出现了一个问题: 打印recordList，里面的多个record的内容显示是一样的
+
+查阅资料后发现，这是一个存放数据地址的问题。 recordList中存放的是record的地址，因此里面的所有record其实都是同一个record，
+所以最后打印出来的是最后一次存放的数据值。
+
+为了解决这个问题，使用了深拷贝的思想: 在每次存放record的时候，都创建一个新的但是与record属性相同的对象，把新对象存放到
+recordList中去。这样recordList中的每个record的地址都是不同的，存放的数据也就正确了.
