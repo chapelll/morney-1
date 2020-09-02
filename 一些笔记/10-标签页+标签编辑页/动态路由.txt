@@ -1,0 +1,8 @@
+在Vue的路由配置文件中，可以在路径上这样写:
+{
+    path: '/labels/edit/:userId',
+    component: EditLabel
+  }
+
+":"是一个占位符，后面的"userId"是一个动态的参数，当我访问 /labels/edit/{这里可以是任何字符串} 时，Vue都会显示 EditLabel 组件。
+而 url 中的 {这里可以是任何字符串} 就是 userId 的值( userId是键，url中的信息是值，它们可以通过 this.$route.params拿到 )
