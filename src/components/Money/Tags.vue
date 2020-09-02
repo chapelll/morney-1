@@ -6,7 +6,7 @@
     <ul class="current">
       <li
         v-for="tag in dataSource"
-        :key="tag.index"
+        :key="tag"
         @click="toggle(tag)"
         :class="selectedTags.indexOf(tag) >= 0 ? 
         'select' : 'unselect' "
@@ -18,6 +18,7 @@
 <script lang="ts">
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
+import recordListModel from '@/models/recordListModel';
 
 @Component
 export default class Tags extends Vue {
@@ -40,8 +41,10 @@ export default class Tags extends Vue {
 
   create() {
     const name = window.prompt("请输入标签名");
+
     if (name === "") {
-      alert('标签名不能为空!')
+      alert('标签名不能为空')
+      return
     } else {
       if (this.dataSource) {
         this.$emit('update:dataSource', [
@@ -50,6 +53,23 @@ export default class Tags extends Vue {
         ])
       }
     }
+
+    /*
+    if (name) {
+      if (this.dataSource) {
+        this.$emit('update:dataSource', [
+          ...this.dataSource,name
+          // 在总线上触发一个事件，事件名称为 update:dataSource，参数为新生成的dataSource数组
+        ])
+      }
+    } else if (name === "") {
+      alert('标签名不能为空')
+      return
+    } else {
+      //当用户点击了取消
+      return
+    }
+    */
   }
 }
 </script>

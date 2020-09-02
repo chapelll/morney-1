@@ -1,15 +1,95 @@
 <template>
-        <Layout>
-            Labels
-        </Layout>
+  <Layout>
+    <ol class="tags">
+      <li v-for="tag in tags" :key="tag">
+        <span>{{tag}}</span>
+        <Icon name="right"></Icon>
+      </li>
+    </ol>
+
+    <div class="createTag-wrapper">
+      <button class="createTag" @click="createTag">新建标签</button>
+    </div>
+  </Layout>
 </template>
 
 <script lang="ts">
-    export default {
-        name: 'Labels',
+import Vue from "vue";
+import { Component } from "vue-property-decorator";
+import tagListModel from "@/models/tagListModel.ts";
+
+tagListModel.fetch(); //一开始就拿到数据
+@Component
+export default class Labels extends Vue {
+  // 属性
+  tags = tagListModel.data;
+  // 方法
+  createTag() {
+    const name = window.prompt("请输入标签名");
+    if (name) {
+      const message = tagListModel.create(name);
+      if (message === "success") {
+        alert("创建成功!");
+      } else if (message === "duplicated") {
+        alert("标签名不能重复!");
+      }
+    } else if (name === "") {
+      // 用户输入为空
+      alert("标签名不能为空!");
+      return;
+    } else {
+      // 用户点击了取消
+      return;
     }
+
+    // let name = window.prompt("请输入标签名");
+    // if (name) {
+    //   this.tags.push(name);
+    //   tagListModel.save(this.tags);
+    //   this.tags = tagListModel.fetch();
+    // } else if (name ===''){
+    //   alert("标签名不能为空!");
+    //   return;
+    // } else {
+    //   // 用户点击取消
+    //   return
+    // }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
-    
+.tags {
+  background: white;
+  font-size: 16px;
+  padding-left: 16px;
+  li {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #e6e6e6;
+    svg {
+      color: #666;
+      margin-right: 16px;
+      height: 18px;
+      width: 18px;
+    }
+  }
+}
+
+.createTag {
+  border: none;
+  background: #767676;
+  color: white;
+  height: 40px;
+  border-radius: 4px;
+  padding: 0 16px;
+  &-wrapper {
+    // createTag 的父亲
+    text-align: center;
+    padding: 16px;
+    margin-top: 28px;
+  }
+}
 </style>
