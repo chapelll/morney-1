@@ -1,8 +1,8 @@
 <template>
   <div>
     <label class="notes">
-      <span class="name">备注</span>
-      <input type="text" placeholder="在这里输入备注" v-model="value"/>
+      <span class="name">{{fieldName}}</span>
+      <input type="text" :placeholder="placeholder" v-model="value"/>
     </label>
   </div>
 </template>
@@ -15,6 +15,9 @@ import { Component, Prop, Watch } from 'vue-property-decorator';
 export default class Notes extends Vue {
   //属性
   value = ''
+  //prop属性
+  @Prop({required: true}) fieldName!: string 
+  @Prop() placeholder?: string 
   // watch 
   // 当 value 的值发生改变时就触发onValueChanged函数，第一个参数是value改变后的值，第二个参数是value改变前的值
   @Watch('value') 
