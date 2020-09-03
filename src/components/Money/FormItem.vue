@@ -24,7 +24,7 @@ export default class FormItem extends Vue {
   @Prop() placeholder?: string 
   // watch 
   // 当 value 的值发生改变时就触发onValueChanged函数，第一个参数是value改变后的值，第二个参数是value改变前的值
-  @Watch('value') 
+
   onValueChanged(value: string) {
     this.$emit('update:value', value)
   }

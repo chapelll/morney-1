@@ -1,3 +1,5 @@
+import createId from '@/lib/createId'
+
 // 将数据层面的操作进行封装(读取和写入)
 const localStorageKeyName = 'tagList'
 
@@ -34,8 +36,9 @@ const tagListModel: TagListModel = {
         if (names.indexOf(name) >= 0) {
             return 'duplicated'
         }
+        const id = createId().toString()
         this.data.push({
-            id: name,
+            id: id,
             name: name
         })
         this.save()
