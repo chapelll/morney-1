@@ -57,16 +57,14 @@ export default class Money extends Vue {
   }
 
   saveRecord() {
-    // 每次调用saveRecord函数时都创建一个新的对象record2，record2的属性与record相同，将它存放进recordList
-    const record2: RecordItem = recordListModel.clone(this.record)
-    record2.createdAt = new Date()  
-    this.recordList.push(record2)
-    // push的是record这个对象的地址，所以recordList存放的都是一样的数据
+    recordListModel.create(this.record)
   }
   // Watch  
   @Watch('recordList')
   OnRecordListChange() {
-    recordListModel.save(this.recordList)
+    // 当我在money页面提交新的record数据时，会调用Model的create函数，create函数就会把新的record放到data(也就是recordList)中去。当data的值改变了，就会执行OnRecordListChange函数
+    console.log('数据变动了');
+    recordListModel.save()
   }
 }
 </script>
