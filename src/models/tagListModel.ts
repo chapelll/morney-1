@@ -2,21 +2,6 @@ import createId from '@/lib/createId'
 
 // 将数据层面的操作进行封装(读取和写入)
 const localStorageKeyName = 'tagList'
-
-type Tag = {
-    id: string;
-    name: string;
-}
-
-type TagListModel = {
-    data: Tag[];
-    fetch: () => Tag[];
-    create: (name: string) => 'success' | 'duplicated'; // 返回值只能是 'success' 或者 'duplicated'(联合类型)
-    save: () => void;
-    update: (id: string, name: string) => 'not found' | 'duplicated' | 'success';
-    remove: (id: string) => boolean;
-}
-
 const tagListModel: TagListModel = {
     data: [],
 

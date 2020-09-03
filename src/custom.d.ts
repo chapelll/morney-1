@@ -7,3 +7,21 @@ type RecordItem = {
     amount: number;
     createdAt?: Date; //类是object的细分
   };
+
+type Tag = {
+    id: string;
+    name: string;
+}
+
+type TagListModel = {
+    data: Tag[];
+    fetch: () => Tag[];
+    create: (name: string) => 'success' | 'duplicated'; // 返回值只能是 'success' 或者 'duplicated'(联合类型)
+    save: () => void;
+    update: (id: string, name: string) => 'not found' | 'duplicated' | 'success';
+    remove: (id: string) => boolean;
+}
+
+interface Window {
+  tagList: tag[];
+}
