@@ -8,18 +8,24 @@
     </div>
 
     <div class="createTag-wrapper">
-      <button class="createTag" @click="createTag">新建标签</button>
+      <Button class="createTag" @click.native="createTag">新建标签</Button>
+      <!-- 组件一般是不会绑定事件的，用户点击大Button时它就不会触发点击事件
+           .native修饰符的作用是监听这个组件的根元素的原生事件，一旦根元素触发了事件，
+           这个大的组件也会收到相应的事件触发 -->
     </div>
   </Layout>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
+import Button from '@/components/Button.vue';
 import { Component } from "vue-property-decorator";
 import tagListModel from "@/models/tagListModel.ts";
 
 tagListModel.fetch(); //一开始就拿到数据
-@Component
+@Component({
+  components: {Button}
+})
 export default class Labels extends Vue {
   // 属性
   tags = tagListModel.data;

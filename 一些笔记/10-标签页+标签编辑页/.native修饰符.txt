@@ -1,0 +1,7 @@
+.native是什么？
+
+.native - 监听组件根元素的原生事件。
+主要是给自定义的组件添加原生事件。
+
+以 <Button> 封装的 <button>为例，用户点击<Button>不会触发点击事件，使用 @click.native，监听了用户点击 <button> 时的
+点击事件，所以在 <Button> 上的点击事件会响应
