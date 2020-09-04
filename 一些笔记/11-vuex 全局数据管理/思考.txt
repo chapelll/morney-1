@@ -1,0 +1,2 @@
+将从Model层取出的data赋值给了View层的recordList。然后调用Model层的方法修改了data，此时recordList的值也会改变。Watch这
+个recordList执行相关的函数

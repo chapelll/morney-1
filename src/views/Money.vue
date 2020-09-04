@@ -62,7 +62,8 @@ export default class Money extends Vue {
   @Watch('recordList')
   OnRecordListChange() {
     // 当我在money页面提交新的record数据时，会调用Model的create函数，create函数就会把新的record放到data(也就是recordList)中去。当data的值改变了，就会执行OnRecordListChange函数
-    console.log('数据变动了');
+    console.log('我执行了');
+    
     recordListModel.save()
   }
 }

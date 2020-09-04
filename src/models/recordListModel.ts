@@ -1,4 +1,5 @@
 import clone from '@/lib/clone.ts'
+console.log('fuck');
 
 // 将数据层面的操作进行封装(读取和写入)
 const localStorageKeyName = 'recordList'
