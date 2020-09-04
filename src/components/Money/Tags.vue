@@ -5,7 +5,7 @@
     </div>
     <ul class="current">
       <li
-        v-for="tag in dataSource"
+        v-for="tag in tagList"
         :key="tag.id"
         @click="toggle(tag)"
         :class="selectedTags.indexOf(tag) >= 0 ? 
@@ -17,13 +17,13 @@
 
 <script lang="ts">
 import Vue from "vue";
+import store from '@/store/index2.ts';
 import { Component, Prop } from "vue-property-decorator";
 
 @Component
 export default class Tags extends Vue {
-  //prop属性
-  @Prop(Array) dataSource: string[] | undefined;
   //属性
+  tagList = store.fetchTags();
   selectedTags: string[] = [];
   //方法
   toggle(tag: string) {
@@ -40,17 +40,15 @@ export default class Tags extends Vue {
 
   create() {
     const name = window.prompt("请输入标签名");
-
-    if (name === "") {
+    
+    if (name) {
+      store.createTag(name)
+    } else if (name === "") {
       alert('标签名不能为空')
       return
     } else {
-      if (this.dataSource) {
-        this.$emit('update:dataSource', [
-          ...this.dataSource,name
-          // 在总线上触发一个事件，事件名称为 update:dataSource，参数为新生成的dataSource数组
-        ])
-      }
+      //当用户点击了取消
+      return
     }
 
     /*
