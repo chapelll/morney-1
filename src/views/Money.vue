@@ -19,18 +19,17 @@ import NumberPad from "@/components/Money/NumberPad.vue";
 import Types from "@/components/Money/Types.vue";
 import FormItem from "@/components/Money/FormItem.vue";
 import Tags from "@/components/Money/Tags.vue";
-import { Component, Watch } from "vue-property-decorator";
-import recordListModel from '@/models/recordListModel.ts'
-import tagListModel from '@/models/tagListModel.ts'
-
-const recordList = recordListModel.fetch()
+import { Component } from "vue-property-decorator";
+import store from '@/store/index2.ts';
 
 @Component({
   components: { NumberPad, Types, FormItem, Tags },
 })
 export default class Money extends Vue {
   // 属性
-  tags = window.tagList;
+  tags = store.tagList;
+  recordList = store.recordList;
+  // 定义一个recordList数组用来存放record (它的值要从localStorage取,默认值为空)
   record: RecordItem = {
     tags: [],
     notes: "",
@@ -39,8 +38,6 @@ export default class Money extends Vue {
   }; 
   // 定义了一个对象record，它的接口是Reord，因此它必须要有Record的属性且属性数据类型要一致
 
-  recordList: RecordItem[] = recordListModel.fetch();
-  // 定义一个recordList数组用来存放record (它的值要从localStorage取,默认值为空)
 
   // 方法
   onUpdateTags(value: string[]) {
@@ -56,16 +53,10 @@ export default class Money extends Vue {
   }
 
   saveRecord() {
-    recordListModel.create(this.record)
+    store.createRecord(this.record)
   }
   // Watch  
-  @Watch('recordList')
-  OnRecordListChange() {
-    // 当我在money页面提交新的record数据时，会调用Model的create函数，create函数就会把新的record放到data(也就是recordList)中去。当data的值改变了，就会执行OnRecordListChange函数
-    console.log('我执行了');
-    
-    recordListModel.save()
-  }
+  
 }
 </script>
 

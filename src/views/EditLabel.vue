@@ -6,7 +6,10 @@
       <div class="rightIcon"></div>
     </div>
     <div class="form-wrapper">
-      <FormItem :value="tag.name" fieldName="标签名" placeholder="请输入标签名" @update:value="update"></FormItem>
+      <FormItem :value="tag.name" 
+                @update:value="update"
+                fieldName="标签名" placeholder="请输入标签名" >
+      </FormItem>
     </div>
 
     <div class="button-wrapper">
@@ -20,6 +23,8 @@ import Vue from "vue";
 import FormItem from "@/components/Money/FormItem.vue";
 import Button from "@/components/Button.vue";
 import { Component, Prop } from "vue-property-decorator";
+import store from '@/store/index2.ts';
+
 // import tagListModel from "@/models/tagListModel";
 
 @Component({
@@ -31,7 +36,7 @@ export default class EditLabel extends Vue {
   created() {
     //const tags = window.tagList;
     // 取出存在localstorage中的标签数组，将其赋值给tags
-    this.tag = window.findTag(this.$route.params.id)!;
+    this.tag = store.findTag(this.$route.params.id);
     // 找到我们想要操作的那一个标签
     // tags.filter这一句的意思是遍历整个tags数组，找出里面那一项id = 我们访问的字符串
     // 的那一项，因为filter返回的是一个数组，所以需要加[0] (我们访问哪项就找哪项)
@@ -42,13 +47,13 @@ export default class EditLabel extends Vue {
 
   update(name: string) {
     if (this.tag) {
-      window.updateTag(this.tag.id, name)
+      store.updateTag(this.tag.id, name)
     }
   }
 
   remove() {
     if (this.tag) {
-      if (window.removeTag(this.tag.id)) {
+      if (store.removeTag(this.tag.id)) {
         this.$router.back()
       } else {
         window.alert('删除失败')

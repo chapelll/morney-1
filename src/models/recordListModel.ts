@@ -21,6 +21,7 @@ const recordListModel = {
         const record2: RecordItem = clone(record)
         record2.createdAt = new Date()  
         this.data.push(record2)
+        this.save()
         // push的是record这个对象的地址，所以recordList存放的都是一样的数据
     }
 }

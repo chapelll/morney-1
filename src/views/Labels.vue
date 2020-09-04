@@ -20,6 +20,8 @@
 import Vue from "vue";
 import Button from '@/components/Button.vue';
 import { Component } from "vue-property-decorator";
+import store from '@/store/index2.ts';
+
 // import tagListModel from "@/models/tagListModel.ts";
 
 @Component({
@@ -27,7 +29,7 @@ import { Component } from "vue-property-decorator";
 })
 export default class Labels extends Vue {
   // 属性
-  tags = window.tagList
+  tags = store.tagList
   // 方法
   createTag() {
     // const name = window.prompt("请输入标签名");
@@ -49,7 +51,7 @@ export default class Labels extends Vue {
 
     const name = window.prompt("请输入标签名");
     if (name) {
-      window.createTag(name)
+      store.createTag(name)
     } else if (name === "") {
       alert("标签名不能为空!");
       return
