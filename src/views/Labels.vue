@@ -20,7 +20,7 @@
 import Vue from "vue";
 import Button from '@/components/Button.vue';
 import { Component } from "vue-property-decorator";
-import tagListModel from "@/models/tagListModel.ts";
+// import tagListModel from "@/models/tagListModel.ts";
 
 @Component({
   components: {Button}

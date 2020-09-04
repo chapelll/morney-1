@@ -20,42 +20,39 @@ import Vue from "vue";
 import FormItem from "@/components/Money/FormItem.vue";
 import Button from "@/components/Button.vue";
 import { Component, Prop } from "vue-property-decorator";
-import tagListModel from "@/models/tagListModel";
+// import tagListModel from "@/models/tagListModel";
 
 @Component({
   components: { FormItem, Button },
 })
 export default class EditLabel extends Vue {
-  tag?: { id: string; name: string } = undefined;
+  tag?: Tag = undefined;
 
   created() {
-    const id = this.$route.params.id;
-    tagListModel.fetch();
-    const tags = tagListModel.data;
+    //const tags = window.tagList;
     // 取出存在localstorage中的标签数组，将其赋值给tags
-    const tag = tags.filter((t) => t.id === id)[0];
+    this.tag = window.findTag(this.$route.params.id)!;
     // 找到我们想要操作的那一个标签
     // tags.filter这一句的意思是遍历整个tags数组，找出里面那一项id = 我们访问的字符串
     // 的那一项，因为filter返回的是一个数组，所以需要加[0] (我们访问哪项就找哪项)
-    if (tag) {
-      this.tag = tag
-    } else {
+    if (!this.tag) {
       this.$router.replace("/404");
-    }
+    } 
   }
 
   update(name: string) {
     if (this.tag) {
-        tagListModel.update(this.tag.id, name)
+      window.updateTag(this.tag.id, name)
     }
   }
 
   remove() {
     if (this.tag) {
-        const flag = tagListModel.remove(this.tag.id)
-        if (flag) {
-            this.$router.back()
-        }
+      if (window.removeTag(this.tag.id)) {
+        this.$router.back()
+      } else {
+        window.alert('删除失败')
+      }
     }
   }
 
