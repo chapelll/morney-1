@@ -17,13 +17,17 @@
 
 <script lang="ts">
 import Vue from "vue";
-import store from '@/store/index2.ts';
 import { Component, Prop } from "vue-property-decorator";
 
-@Component
+@Component({
+  computed: {
+    tagList() {
+      return this.$store.state.tagList
+    }
+  }
+})
 export default class Tags extends Vue {
   //属性
-  tagList = store.fetchTags();
   selectedTags: string[] = [];
   //方法
   toggle(tag: string) {
@@ -38,11 +42,15 @@ export default class Tags extends Vue {
     // 当选择标签时触发xxx事件，参数为当前的selectedTags数组
   }
 
+  created() {
+    this.$store.commit('fetchTags')
+    // 页面创建时就获取tagList数据
+  }
+
   create() {
     const name = window.prompt("请输入标签名");
-    
     if (name) {
-      store.createTag(name)
+      this.$store.commit('createTag', name)
     } else if (name === "") {
       alert('标签名不能为空')
       return
@@ -50,24 +58,8 @@ export default class Tags extends Vue {
       //当用户点击了取消
       return
     }
-
-    /*
-    if (name) {
-      if (this.dataSource) {
-        this.$emit('update:dataSource', [
-          ...this.dataSource,name
-          // 在总线上触发一个事件，事件名称为 update:dataSource，参数为新生成的dataSource数组
-        ])
-      }
-    } else if (name === "") {
-      alert('标签名不能为空')
-      return
-    } else {
-      //当用户点击了取消
-      return
-    }
-    */
   }
+
 }
 </script>
 
