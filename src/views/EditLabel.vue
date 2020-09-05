@@ -6,7 +6,7 @@
       <div class="rightIcon"></div>
     </div>
     <div class="form-wrapper">
-      <FormItem :value="tag.name" @update:value="update" fieldName="标签名" placeholder="请输入标签名"></FormItem>
+      <FormItem :value="currentTag.name" @update:value="update" fieldName="标签名" placeholder="请输入标签名"></FormItem>
     </div>
 
     <div class="button-wrapper">
@@ -27,7 +27,7 @@ import { Component, Prop } from "vue-property-decorator";
   components: { FormItem, Button },
 })
 export default class EditLabel extends Vue {
-  get tag() {
+  get currentTag() {
     return this.$store.state.currentTag;
     // 使用计算属性的get方法。 tag的值依赖于this.$store.state.currentTag
   }
@@ -35,8 +35,10 @@ export default class EditLabel extends Vue {
   created() {
     const id = this.$route.params.id;
     // 通过url找到想要修改的那个标签的id
-    this.$store.commit("setCurrentTag", id);
-    if (!this.tag) {
+    this.$store.commit('fetchTags')
+    //setCurrentTag方法默认tagList是存在的，但是当我直接刷新当前页面时tagList是不在的(本来应该由其他组件执行fetch函数获取tagList，但是直接刷新当前页面其他组件不会执行，所以增加一个fetch函数)
+    this.$store.commit('setCurrentTag', id);
+    if (!this.currentTag) {
       this.$router.replace("/404");
     }
 
@@ -53,19 +55,14 @@ export default class EditLabel extends Vue {
 
   update(name: string) {
     console.log(name);
-    if (this.tag) {
-      this.$store.commit("updateTag", { id: this.tag.id, name: name });
+    if (this.currentTag) {
+      this.$store.commit("updateTag", { id: this.currentTag.id, name: name });
     }
   }
 
   remove() {
-    if (this.tag) {
-      // if (store.removeTag(this.tag.id)) {
-      //   this.$router.back()
-      // } else {
-      //   window.alert('删除失败')
-      // }
-      return;
+    if (this.currentTag) {
+      this.$store.commit('removeTag', this.currentTag.id)
     }
   }
 

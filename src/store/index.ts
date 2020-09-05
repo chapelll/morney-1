@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import clone from '@/lib/clone.ts'
 import createId from '@/lib/createId'
+import router from '../router'
 
 Vue.use(Vuex)
 
@@ -12,12 +13,12 @@ type RootState = {
 }
 
 const store = new Vuex.Store({
-  state: { 
+  state: {
     currentTag: undefined,
     // 当前想要修改的tag标签
-    recordList: [] ,
+    recordList: [],
     // 将recordList存储在vuex的state中(方便进行全局管理)
-    tagList: [] 
+    tagList: []
     // 将tagList存储在vuex的state中(方便进行全局管理)
   } as RootState,
   mutations: { //methods
@@ -72,15 +73,15 @@ const store = new Vuex.Store({
     },
 
     // 在EditLabel页面更改当前标签的name
-    updateTag(state, payload: {id: string; name: string}) {
+    updateTag(state, payload: { id: string; name: string }) {
       const id = payload.id
       const name = payload.name
       const idList = state.tagList.map(item => item.id)
-      if (idList.indexOf(id) >= 0) { 
+      if (idList.indexOf(id) >= 0) {
         // 判断id存在于idList
         const names = state.tagList.map(item => item.name)
         if (names.indexOf(name) >= 0) {
-        // 判断新的标签名是否在names已经存在
+          // 判断新的标签名是否在names已经存在
           window.alert('标签名重复')
         } else {
           const tag = state.tagList.filter(item => item.id === id)[0]
@@ -90,8 +91,28 @@ const store = new Vuex.Store({
           // 修改后对tagList进行保存
         }
       }
-    }
+    },
 
+    // 在在EditLabel页面删除当前标签
+    removeTag(state, id: string) {
+      let index = -1
+      for (let i = 0; i < state.tagList.length; i++) {
+        if (state.tagList[i].id === id) {
+          index = i
+          break
+          // 找到当前标签在tagList中的索引值
+        }
+      }
+      if (index >= 0) {
+        // 如果当前标签在tagList中存在
+        state.tagList.splice(index, 1)
+        store.commit('saveTags')
+        router.back()
+      } else {
+        window.alert('删除失败')
+      }
+      
+    }
   }
 })
 
