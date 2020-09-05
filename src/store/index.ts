@@ -69,7 +69,29 @@ const store = new Vuex.Store({
       const tag = state.tagList.filter(item => item.id === id)[0]
       // 获取id对应的那个tag，将其赋给currentTag
       state.currentTag = tag
+    },
+
+    // 在EditLabel页面更改当前标签的name
+    updateTag(state, payload: {id: string; name: string}) {
+      const id = payload.id
+      const name = payload.name
+      const idList = state.tagList.map(item => item.id)
+      if (idList.indexOf(id) >= 0) { 
+        // 判断id存在于idList
+        const names = state.tagList.map(item => item.name)
+        if (names.indexOf(name) >= 0) {
+        // 判断新的标签名是否在names已经存在
+          window.alert('标签名重复')
+        } else {
+          const tag = state.tagList.filter(item => item.id === id)[0]
+          // 找到进行修改的那个标签
+          tag.name = name
+          store.commit('saveTags')
+          // 修改后对tagList进行保存
+        }
+      }
     }
+
   }
 })
 

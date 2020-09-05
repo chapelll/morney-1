@@ -6,10 +6,7 @@
       <div class="rightIcon"></div>
     </div>
     <div class="form-wrapper">
-      <FormItem :value="tag.name" 
-                @update:value="update"
-                fieldName="标签名" placeholder="请输入标签名" >
-      </FormItem>
+      <FormItem :value="tag.name" @update:value="update" fieldName="标签名" placeholder="请输入标签名"></FormItem>
     </div>
 
     <div class="button-wrapper">
@@ -31,22 +28,17 @@ import { Component, Prop } from "vue-property-decorator";
 })
 export default class EditLabel extends Vue {
   get tag() {
-    return this.$store.state.currentTag
-    // 使用计算属性的get方法。 tag的值依赖于this.$store.state.currentTag 
+    return this.$store.state.currentTag;
+    // 使用计算属性的get方法。 tag的值依赖于this.$store.state.currentTag
   }
 
   created() {
-    const id = this.$route.params.id
+    const id = this.$route.params.id;
     // 通过url找到想要修改的那个标签的id
-    this.$store.commit('setCurrentTag', id) 
-     
-
-
-
-
-
-
-
+    this.$store.commit("setCurrentTag", id);
+    if (!this.tag) {
+      this.$router.replace("/404");
+    }
 
     // //const tags = window.tagList;
     // // 取出存在localstorage中的标签数组，将其赋值给tags
@@ -56,12 +48,13 @@ export default class EditLabel extends Vue {
     // // 的那一项，因为filter返回的是一个数组，所以需要加[0] (我们访问哪项就找哪项)
     // if (!this.tag) {
     //   this.$router.replace("/404");
-    // } 
+    // }
   }
 
   update(name: string) {
+    console.log(name);
     if (this.tag) {
-      //store.updateTag(this.tag.id, name)
+      this.$store.commit("updateTag", { id: this.tag.id, name: name });
     }
   }
 
@@ -72,12 +65,12 @@ export default class EditLabel extends Vue {
       // } else {
       //   window.alert('删除失败')
       // }
-      return
+      return;
     }
   }
 
   goBack() {
-      this.$router.back()
+    this.$router.back();
   }
 }
 </script>
