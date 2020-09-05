@@ -20,35 +20,21 @@
 import Vue from "vue";
 import Button from '@/components/Button.vue';
 import { Component } from "vue-property-decorator";
-import store from '@/store/index2.ts';
-
-// import tagListModel from "@/models/tagListModel.ts";
+import { mixins } from 'vue-class-component';
+import TagHelper from '@/mixins/TagHelper.ts'
 
 @Component({
-  components: {Button}
-})
-export default class Labels extends Vue {
-  // 属性
-  tags = store.tagList
-  // 方法
-  createTag() {
-    
-
-    const name = window.prompt("请输入标签名");
-    if (name) {
-      store.createTag(name)
-    } else if (name === "") {
-      alert("标签名不能为空!");
-      return
-    } else {
-      //用户点击了取消
-      return
+  components: {Button},
+  computed: {
+    tags(){
+      return this.$store.state.tagList
     }
   }
-  onClick(event: MouseEvent) {
-    const xxx = event.target as HTMLElement
-    console.log(xxx.textContent);
-    this.$router.replace(`/labels/edit/${xxx.textContent}`)
+})
+export default class Labels extends mixins(TagHelper) {
+  // 方法
+  beforeCreate() {
+    this.$store.commit('fetchTags')
   }
 }
 </script>
