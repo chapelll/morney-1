@@ -23,7 +23,6 @@ import Vue from "vue";
 import FormItem from "@/components/Money/FormItem.vue";
 import Button from "@/components/Button.vue";
 import { Component, Prop } from "vue-property-decorator";
-import store from '@/store/index2.ts';
 
 // import tagListModel from "@/models/tagListModel";
 
@@ -31,33 +30,49 @@ import store from '@/store/index2.ts';
   components: { FormItem, Button },
 })
 export default class EditLabel extends Vue {
-  tag?: Tag = undefined;
+  get tag() {
+    return this.$store.state.currentTag
+    // 使用计算属性的get方法。 tag的值依赖于this.$store.state.currentTag 
+  }
 
   created() {
-    //const tags = window.tagList;
-    // 取出存在localstorage中的标签数组，将其赋值给tags
-    this.tag = store.findTag(this.$route.params.id);
-    // 找到我们想要操作的那一个标签
-    // tags.filter这一句的意思是遍历整个tags数组，找出里面那一项id = 我们访问的字符串
-    // 的那一项，因为filter返回的是一个数组，所以需要加[0] (我们访问哪项就找哪项)
-    if (!this.tag) {
-      this.$router.replace("/404");
-    } 
+    const id = this.$route.params.id
+    // 通过url找到想要修改的那个标签的id
+    this.$store.commit('setCurrentTag', id) 
+     
+
+
+
+
+
+
+
+
+    // //const tags = window.tagList;
+    // // 取出存在localstorage中的标签数组，将其赋值给tags
+    // this.tag = store.findTag(this.$route.params.id);
+    // // 找到我们想要操作的那一个标签
+    // // tags.filter这一句的意思是遍历整个tags数组，找出里面那一项id = 我们访问的字符串
+    // // 的那一项，因为filter返回的是一个数组，所以需要加[0] (我们访问哪项就找哪项)
+    // if (!this.tag) {
+    //   this.$router.replace("/404");
+    // } 
   }
 
   update(name: string) {
     if (this.tag) {
-      store.updateTag(this.tag.id, name)
+      //store.updateTag(this.tag.id, name)
     }
   }
 
   remove() {
     if (this.tag) {
-      if (store.removeTag(this.tag.id)) {
-        this.$router.back()
-      } else {
-        window.alert('删除失败')
-      }
+      // if (store.removeTag(this.tag.id)) {
+      //   this.$router.back()
+      // } else {
+      //   window.alert('删除失败')
+      // }
+      return
     }
   }
 
