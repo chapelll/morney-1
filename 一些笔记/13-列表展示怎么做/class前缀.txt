@@ -1,0 +1,5 @@
+应用场景: 父组件想要操作子组件的样式
+
+父组件向子组件传递参数: :class-prexfix = 'xxx' ，子组件通过prop声明获得这个值后将其绑定在直接的标签上: 
+<li :class="classPrefix + ' item ' ">支出</li> ， 这样子组件的li标签的样式就变成了 xxxitem
+父组件通过 .xxxitem 来操作子组件的li标签 (class-prefix就叫做前缀， xxx 这个值是来源于父组件的)

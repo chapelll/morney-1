@@ -1,0 +1,5 @@
+Types组件逻辑:
+	外部组件向Types组件传递一个值 :value = "type" (type默认为 -) 。 Type收到这个值后里面的两个li会进行判断(value为 - ，
+支出属性加上 selected ;  value为+ ，收入属性加上 selected) ， 当点击两个li时，会触发 selectType 事件，该事件会向外传递一个
+事件 this.$emit('update:value', type) ，type的值就是每个li所代表的 - 或者 + 。 外部组件收到这个触发事件，就改变传入给Type组
+件的值 :value = "type"(type的值视   this.$emit('update:value', type) 中type的值为定)。 因此可以使用.sync修饰符
