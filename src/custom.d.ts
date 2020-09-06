@@ -5,12 +5,18 @@ type RecordItem = {
     notes: string;
     type: string;
     amount: number;
-    createdAt?: Date; //类是object的细分
+    createdAt?: string; //类是object的细分
   };
 
 type Tag = {
     id: string;
     name: string;
+}
+
+type RootState = {
+    recordList: RecordItem[];
+    tagList: Tag[];
+    currentTag?: Tag;
 }
 
 type TagListModel = {
