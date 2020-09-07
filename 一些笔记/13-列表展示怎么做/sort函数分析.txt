@@ -1,0 +1,7 @@
+sort()函数的括号里可以传入一个函数，这个函数会有两个值(a,b)，它们表示调用sort函数的对象中的两个相邻的item。若a - b < 0，就
+表示相邻两项中的前一个比后一个小，则按升序排序。若b - a < 0，就表示相邻两项中的前一个比后一个大，则按降序排序。
+
+举例: recordList.sort((a,b) => dayjs(a.createdAt).valueOf() -  dayjs(b.createdAt).valueOf())
+
+针对recordList这个数组，如果数组中相邻的两项a和b，若a的创建日期(转化成数字)小于b，则recordList中的各项会按照这个(各项创建
+日期转化成的数字大小)升序排序

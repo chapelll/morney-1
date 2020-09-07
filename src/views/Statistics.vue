@@ -1,19 +1,18 @@
 <template>
   <Layout>
     <Tabs class-prefix="type" :data-source="recordTypeList" :value.sync="type"></Tabs>
-    <Tabs class-prefix="interval" :data-source="intervalList" :value.sync="interval"></Tabs>
-      <ol>
-        <li v-for="(group,index) in result" :key="index">
-            <h3 class="title">{{group.title}}</h3>
-            <ol>
-                <li v-for="item in group.items" :key="item.id" class="record">
-                  <span>{{tagString(item.tags)}}</span> 
-                  <span class="sta-notes">{{item.notes}}</span> 
-                  <span>￥{{item.amount}}</span>
-                </li>
-            </ol>
-        </li>
-      </ol>
+    <ol>
+      <li v-for="(group,index) in groupedList" :key="index">
+        <h3 class="title">{{beautify(group.title)}} <span>{{type}} {{group.total}}</span></h3>
+        <ol>
+          <li v-for="item in group.items" :key="item.id" class="record">
+            <span>{{tagString(item.tags)}}</span>
+            <span class="sta-notes">{{item.notes}}</span>
+            <span>￥{{item.amount}}</span>
+          </li>
+        </ol>
+      </li>
+    </ol>
   </Layout>
 </template>
 
@@ -23,6 +22,9 @@ import { Component } from "vue-property-decorator";
 import Tabs from "@/components/Tabs.vue";
 import intervalList from "@/constants/intervalList";
 import recordTypeList from "@/constants/recordTypeList";
+import dayjs from "dayjs";
+import clone from "@/lib/clone.ts";
+
 @Component({
   components: { Tabs },
 })
@@ -32,36 +34,86 @@ export default class Statistics extends Vue {
     return (this.$store.state as RootState).recordList;
   }
 
-  get result() {
+  get groupedList() {
     const recordList = this.recordList;
-
-    type HashTableValue = {
-        title: string;
-        items: RecordItem[];
+    if (recordList.length === 0) {
+      return [];
     }
 
-    const hashTable: {[key: string]: HashTableValue} = {}
-    for (let i = 0; i < recordList.length; i++) {
-        const [date, time] = recordList[i].createdAt!.split('T')
-        hashTable[date] = hashTable[date] || {title: date, items: []}
-        // 如果该date这个键在哈希表还没有，就创建一个空的
-        hashTable[date].items.push(recordList[i])
+    //对recordList中的记录按生成时间进行排序
+    const newList = clone(recordList)
+      .filter((r) => r.type === this.type)
+      .sort(
+        (a, b) => dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf()
+      );
+    // newList中的记录按生成时间从晚到早排序
+
+    type Result = {
+      title: string;
+      total?: number;
+      items: RecordItem[];
+    }[];
+
+    const result: Result = [
+      {
+        title: dayjs(newList[0].createdAt).format("YYYY-MM-DD"),
+        items: [newList[0]],
+      },
+    ];
+
+    for (let i = 1; i < newList.length; i++) {
+      const current = newList[i];
+      const last = result[result.length - 1];
+      if (dayjs(last.title).isSame(dayjs(current.createdAt), "day")) {
+        last.items.push(current);
+      } else {
+        result.push({
+          title: dayjs(current.createdAt).format("YYYY-MM-DD"),
+          items: [current],
+        });
+      }
     }
-    // v-for 遍历哈希表时，只会遍历hash的value
-    return hashTable;
+
+    result.map((group) => {
+      group.total = group.items.reduce((sum, item) => sum + item.amount, 0);
+    });
+    // 针对result中的每一个group对象，将对象的items拿来使用reduce方法，设置一个累加值sum(初始值赋为0)，对items中的每一个item，都把它的amount拿出来加给sum 最终sum就是这一个group对象中的每一个items.item中的amount的和
+    return result;
   }
 
   tagString(tags: Tag[]) {
-    return tags.length === 0 ? '无' : tags.join(',')
+    return tags.length === 0 ? "无" : tags.join(",");
   }
 
   beforeCreate() {
     this.$store.commit("fetchRecords");
   }
 
+  beautify(string: string) {
+    const day = dayjs(string);
+    // 获取列表中的那个时间，转化成dayjs对象
+    const now = dayjs();
+    // 获取当前时间
+
+    if (day.isSame(now, "day")) {
+      // 如果列表中的时间和当前时间是同一天
+      return "今天";
+    } else if (day.isSame(now.subtract(1, "day"), "day")) {
+      // 如果列表中的时间和当前时间的昨天是同一天
+      return "昨天";
+    } else if (day.isSame(now.subtract(2, "day"), "day")) {
+      // 如果列表中的时间和当前时间的昨天是同一天
+      return "前天";
+    } else if (day.isSame(now, "year")) {
+      // 如果列表中的时间和当前时间是同一年
+      return day.format("M月M日");
+      // 不返回年份，只返回 几月几日
+    } else {
+      return day.format("YYYY年M月M日");
+    }
+  }
+
   type = "-";
-  interval = "day";
-  intervalList = intervalList;
   recordTypeList = recordTypeList;
 }
 </script>
@@ -72,7 +124,6 @@ export default class Statistics extends Vue {
   &.selected {
     background: #c4c4c4;
     &::after {
-      display: none;
     }
   }
 }
@@ -98,6 +149,6 @@ export default class Statistics extends Vue {
 .sta-notes {
   margin-right: auto;
   margin-left: 16px;
-  color: #999
+  color: #999;
 }
 </style>
