@@ -103,7 +103,7 @@ export default class NumberPad extends Vue {
       background: transparent;
       border: none;
       // 基础背景色
-      $bg: #f2f2f2;
+      $bg: #c7e6f3;
       &:nth-child(1) {
         background: $bg;
       }

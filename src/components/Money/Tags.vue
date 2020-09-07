@@ -61,7 +61,7 @@ export default class Tags extends mixins(TagHelper) {
     display: flex;
     flex-wrap: wrap;
     > li {
-      $bg: #d9d9d9;
+      $bg: #c7e6f3;
       background: $bg;
       height: 24px;
       line-height: 24px;
