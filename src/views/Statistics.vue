@@ -1,9 +1,12 @@
 <template>
   <Layout>
     <Tabs class-prefix="type" :data-source="recordTypeList" :value.sync="type"></Tabs>
-    <ol>
+    <ol v-if="groupedList.length>0">
       <li v-for="(group,index) in groupedList" :key="index">
-        <h3 class="title">{{beautify(group.title)}} <span>{{type}} {{group.total}}</span></h3>
+        <h3 class="title">
+          {{beautify(group.title)}}
+          <span>{{type}} {{group.total}}</span>
+        </h3>
         <ol>
           <li v-for="item in group.items" :key="item.id" class="record">
             <span>{{tagString(item.tags)}}</span>
@@ -13,6 +16,9 @@
         </ol>
       </li>
     </ol>
+    <div v-else class="noResult">
+      目前没有相关记录
+    </div>
   </Layout>
 </template>
 
@@ -36,9 +42,6 @@ export default class Statistics extends Vue {
 
   get groupedList() {
     const recordList = this.recordList;
-    if (recordList.length === 0) {
-      return [];
-    }
 
     //对recordList中的记录按生成时间进行排序
     const newList = clone(recordList)
@@ -46,6 +49,9 @@ export default class Statistics extends Vue {
       .sort(
         (a, b) => dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf()
       );
+    if (newList.length === 0) {
+      return [];
+    }
     // newList中的记录按生成时间从晚到早排序
 
     type Result = {
@@ -82,7 +88,7 @@ export default class Statistics extends Vue {
   }
 
   tagString(tags: Tag[]) {
-    return tags.length === 0 ? "无" : tags.join(",");
+    return tags.length === 0 ? "无" : tags.map(t => t.name).join(",");
   }
 
   beforeCreate() {
@@ -119,6 +125,10 @@ export default class Statistics extends Vue {
 </script>
 
 <style scoped lang="scss">
+.noResult {
+  padding: 16px;
+  text-align: center;
+}
 ::v-deep .type-tabs-item {
   background: #9cdcf8;
   &.selected {

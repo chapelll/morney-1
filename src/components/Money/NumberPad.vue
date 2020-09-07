@@ -71,10 +71,15 @@ export default class NumberPad extends Vue {
   }
 
   ok() {
-    this.$emit('update:value', this.output)
-    this.$emit('submit', this.output)
-    this.output = '0'
+    if (this.output === '0') {
+      window.alert('内容不能为空!')
+    } else {
+      this.$emit('update:value', this.output)
+      this.$emit('submit', this.output)
+      this.output = '0'
     // 每次点击 ok 后，将output至为0
+    }
+    
   }
 }
 </script>
