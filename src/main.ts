@@ -28,7 +28,8 @@ window.onload = function() {
 if (document.documentElement.clientWidth > 500) {
   window.alert('使用手机打开本页面获得更良好的体验!')
   const img = document.createElement('img')
-  img.src = '../public/qrcode.png'
+  img.src = require('../src/assets/qrcode.png')
+  
   img.style.position = 'fixed'
   img.style.left = '50%'
   img.style.top = '50%'
