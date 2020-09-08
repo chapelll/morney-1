@@ -24,3 +24,18 @@ window.onload = function() {
     window.scrollTo(0,1000)
   }, 0)
 }
+
+if (document.documentElement.clientWidth > 500) {
+  window.alert('使用手机打开本页面获得更良好的体验!')
+  const img = document.createElement('img')
+  img.src = '/qrcode.png'
+  img.style.position = 'fixed'
+  img.style.left = '50%'
+  img.style.top = '50%'
+  img.style.transform = 'translate(-50%,-50%)'
+  img.style.boxShadow = '0 0 10px rgba(0,0,0,0.25)'
+  document.body.appendChild(img)
+  img.addEventListener('click', ()=> {
+    img.remove()
+  })
+}
